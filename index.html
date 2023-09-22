@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Birthday Card</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background-color: #fff;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h1 {
+            color: #ff6f61;
+            font-size: 24px;
+        }
+        p {
+            font-size: 18px;
+        }
+        #cake {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        #confetti {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎉 Happy Birthday Moncy! 🎉</h1>
+        <p>Wishing you a day filled with joy, laughter, and amazing surprises!</p>
+        <img id="cake" src="https://th.bing.com/th/id/OIP.2D3A6lTVuOc1It0OUtu9pQHaEo?pid=ImgDet&rs=1" alt="Birthday Cake">
+        <p>May this year be filled with incredible moments and unforgettable memories.</p>
+    </div>
+    <canvas id="confetti"></canvas>
+    <script>
+        const confettiCanvas = document.getElementById('confetti');
+        const ctx = confettiCanvas.getContext('2d');
+
+        const colors = ['#ff6f61', '#ffd166', '#06d6a0', '#118ab2', '#073b4c'];
+        const confettiCount = 100;
+
+        function createConfettiParticle() {
+            return {
+                x: Math.random() * confettiCanvas.width,
+                y: Math.random() * confettiCanvas.height,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                radius: Math.random() * 5 + 5,
+                speedX: Math.random() * 4 - 2,
+                speedY: Math.random() * 4 + 1,
+            };
+        }
+
+        const confettiParticles = Array.from({ length: confettiCount }, createConfettiParticle);
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles.forEach(particle => {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+
+                if (particle.y > confettiCanvas.height) {
+                    particle.y = 0;
+                }
+            });
+
+            requestAnimationFrame(drawConfetti);
+        }
+
+        setTimeout(() => {
+            document.querySelector('.card').style.display = 'none';
+            confettiCanvas.style.display = 'block';
+            drawConfetti();
+        }, 4000); // Show confetti animation after 5 seconds
+    </script>
+</body>
+</html>
